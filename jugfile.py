@@ -6,6 +6,11 @@ from simulate import simulate
 simulate = TaskGenerator(simulate)
 P2 = 0.95
 P1 = np.linspace(0, 1, 101)
+STRATEGIES = [
+        strategy.StrictlyFirst,
+        strategy.StrictlySecond,
+        strategy.StartFirstLearnFullInformation,
+        ]
 
 @TaskGenerator
 def plot_results(results):
@@ -25,7 +30,7 @@ def plot_results(results):
 
 results = {}
 for p1 in P1:
-    for s in [strategy.StrictlyFirst(), strategy.StrictlySecond(), strategy.StartFirstLearnFullInformation()]:
-        results[s.name(), p1] = simulate(s, p1, P2)
+    for s in STRATEGIES:
+        results[s().name(), p1] = simulate(s(), p1, P2)
 
 plot_results(results)
