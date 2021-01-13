@@ -10,6 +10,7 @@ STRATEGIES = [
         strategy.StrictlyFirst,
         strategy.StrictlySecond,
         strategy.StartFirstLearnFullInformation,
+        strategy.StartFirstLearnWeak,
         ]
 
 @TaskGenerator
