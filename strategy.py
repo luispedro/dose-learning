@@ -1,10 +1,29 @@
+from abc import ABCMeta, abstractmethod
+
+class Strategy(metaclass=ABCMeta):
+    @abstractmethod
+    def v2(self, vd, pop):
+        '''Compute the number of vaccinates that should be given as a second shot'''
+        pass
+
+    @abstractmethod
+    def name(self) -> str:
+        '''Human readable name for the strategy'''
+        pass
+
+    @abstractmethod
+    def observe(self, pop, events):
+        '''Observe the population and death events (for possible learning)'''
+        pass
+
+
 def first(vd, vaccinated0):
     return vd - min(vd, vaccinated0)
 
 def second(vd, pop):
     return min(vd, pop.ready_for_2())
 
-class StrictlyFirst:
+class StrictlyFirst(Strategy):
     def v2(self, vd, pop):
         return first(vd, pop.vaccinated0)
     def observe(self, _, __):
@@ -12,7 +31,7 @@ class StrictlyFirst:
     def name(self):
         return 'Strictly first'
 
-class StrictlySecond:
+class StrictlySecond(Strategy):
     def v2(self, vd, pop):
         return second(vd, pop)
     def observe(self, _, __):
@@ -22,7 +41,7 @@ class StrictlySecond:
 
 
 
-class StartFirstLearnFullInformation:
+class StartFirstLearnFullInformation(Strategy):
     def __init__(self):
         self.N0 = 0
         self.I0 = 0
@@ -53,7 +72,7 @@ def weak_observe(n):
     import numpy as np
     return np.random.binomial(n, .1)
 
-class StartFirstLearnWeak:
+class StartFirstLearnWeak(Strategy):
     def __init__(self):
         self.N0 = 0
         self.I0 = 0
