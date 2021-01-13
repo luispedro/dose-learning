@@ -8,17 +8,6 @@ IFR = 0.01
 INF0 = 100_000
 INF_RATE = INF0/N
 
-class StrictlySecond:
-    def v2(self, vd, pop):
-        available = pop.ready_for_2()
-        return min(available, vd)
-
-
-class StrictlyFirst:
-    def v2(self, vd, pop):
-        missing = pop.ready_for_1()
-        return max(0, vd - missing)
-
 class Population:
     def __init__(self, total):
         self.total = total
@@ -64,6 +53,4 @@ def simulate(strategy, p1, p2):
         pop.vaccinate(VD - v2, v2)
     return np.array(deaths)
 
-P1 = simulate(StrictlyFirst(), p1=.5, p2=.95)
-P2 = simulate(StrictlySecond(), p1=.5, p2=.95)
 
