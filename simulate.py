@@ -1,7 +1,12 @@
 import numpy as np
 N = 450_000_000
 VD = 1_000_000
+DAYS_TO_P1 = 11
 N2 = 20
+
+IFR = 0.01
+INF0 = 100_000
+INF_RATE = INF0/N
 
 class StrictlySecond:
     def v2(self, vd, pop):
@@ -42,19 +47,23 @@ class Population:
     def fully_protected(self):
         return self.vaccinated2 == self.total
 
+    def deaths(self, p1, p2):
+        sus = self.ready_for_1() + self.vaccinated1[:DAYS_TO_P1].sum()
+        sus += self.vaccinated1[DAYS_TO_P1:].sum() * (1 - p1)
+        sus += self.vaccinated2 * (1 - p2)
+        return IFR * INF_RATE * sus
+
 def simulate(strategy, p1, p2):
     pop = Population(N)
-    P = []
+    deaths = []
     while not pop.fully_protected():
         pop.next_day()
         ready_for_2 = pop.ready_for_2()
-        protection = p2 * pop.vaccinated2 + p1 * pop.vaccinated1[11:].sum()
-        P.append(protection)
+        deaths.append(pop.deaths(p1, p2))
         v2 = strategy.v2(VD, pop)
         pop.vaccinate(VD - v2, v2)
-    return np.array(P)
+    return np.array(deaths)
 
-P1 = simulate(StrictlyFirst(), p1=.1, p2=.95)
-P2 = simulate(StrictlySecond(), p1=.1, p2=.95)
-print(P1.sum()/P2.sum())
+P1 = simulate(StrictlyFirst(), p1=.5, p2=.95)
+P2 = simulate(StrictlySecond(), p1=.5, p2=.95)
 
