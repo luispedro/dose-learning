@@ -3,6 +3,8 @@ import numpy as np
 
 import strategy
 from simulate import simulate
+import covid19constants
+
 simulate = TaskGenerator(simulate)
 P2 = 0.95
 P1 = np.linspace(0, 1, 101)
@@ -21,6 +23,7 @@ def plot_results(results):
     lines = set(k[0] for k in results)
     for k in lines:
         line = np.array([results[k, p1].sum() for p1 in P1])
+        line *= covid19constants.IFR
         ax.plot(P1, line/1000., label=k, lw=2, alpha=.6)
     ax.set_xlabel('Protection with 1 dose')
     ax.set_ylabel('Total number of deaths (1,000s)')

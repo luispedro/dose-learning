@@ -70,7 +70,7 @@ class StartFirstLearnFullInformation(Strategy):
 
 def weak_observe(n):
     import numpy as np
-    return np.random.binomial(n, .1)
+    return np.random.binomial(n, .001)
 
 class StartFirstLearnWeak(Strategy):
     def __init__(self):
