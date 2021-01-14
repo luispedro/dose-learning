@@ -1,13 +1,14 @@
 import numpy as np
 from collections import namedtuple
 
-N = 450_000_000
-VD = 1_000_000
+N = 100_000_000
+VD = 500_000
+
 DAYS_TO_P1 = 11
 N2 = 20
 
 IFR = 0.01
-INF0 = 100_000
+INF0 = 50_000
 INF_RATE = INF0/N
 
 Events = namedtuple('Events', ['unvacinated', 'protected1', 'protected2'])
